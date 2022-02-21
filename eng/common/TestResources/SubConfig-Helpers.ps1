@@ -1,4 +1,8 @@
-function ShouldMarkValueAsSecret([string]$serviceDirectoryPrefix, [string]$key, [string]$value, [array]$allowedValues = @())
+function BuildServiceDirectoryPrefix([string]$serviceName) {
+    return $serviceName.ToUpperInvariant() + "_"
+}
+
+function ShouldMarkValueAsSecret([string]$serviceName, [string]$key, [string]$value, [array]$allowedValues = @())
 {
     $logOutputNonSecret = @(
         # Environment Variables
@@ -24,6 +28,8 @@ function ShouldMarkValueAsSecret([string]$serviceDirectoryPrefix, [string]$key, 
         "TestApplicationOid",
         "ProvisionerApplicationId"
     )
+
+    $serviceDirectoryPrefix = BuildServiceDirectoryPrefix $serviceName
 
     $suffix1 = $key -replace $serviceDirectoryPrefix, ""
     $suffix2 = $key -replace "AZURE_", ""
